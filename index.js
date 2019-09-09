@@ -10,7 +10,6 @@ export default class JumbledSentence extends React.Component{
     }
     componentDidMount(){
     this.scrambleSentence(this.props.sentence);
-    // this.opacity = new Animated.Value(1);
     }
     scrambleSentence(sentence){
         if(sentence[0].length){
@@ -26,7 +25,6 @@ export default class JumbledSentence extends React.Component{
                 scrambledArray.push(actualArray[random])
                 }
             }
-            console.log(scrambledArray)
             this.setState(state => {state.scrambledArray = scrambledArray; return state;})
         }else{
             console.log("empty string")
@@ -51,7 +49,6 @@ export default class JumbledSentence extends React.Component{
     handleSubmit(){
     if(this.state.arrangedArray.length == this.len){
         let response = this.state.arrangedArray.join(" ").trim();
-        console.log(response)
         if(this.props.sentence.includes(response)){
             this.props.onSuccess();
         }
@@ -96,7 +93,6 @@ export default class JumbledSentence extends React.Component{
         })
     }
     render(){
-        // const animatedStyle = {opacity: this.opacity}
         return (
             <View>
                 <View style = {{flex: 1, justifyContent: 'center'}}>
