@@ -2,12 +2,22 @@
 React Native npm module
 
 # installation
-npm install https://github.com/HimaniRathi/react-native-jumbled-sentence
+```npm install https://github.com/HimaniRathi/react-native-jumbled-sentence```
 
 # usage
 ```
- <JumbledSentence 
-    sentence = {["she is going to the school", "is she going to the school"]}
+<JumbledSentence 
+    hint = {{title: "English Translation", description: "I am going to school"}}
+    sentenceToJumble = {["मैं विद्यालय जा रहा हूँ"]}
+    onSuccess = {this.onSuccess}
+    onFailure = {this.onFailure}
+/>
+```
+
+# another usage
+```
+<JumbledSentence
+    sentenceToJumble = {["she is going to the school", "is she going to the school"]}
     onSuccess = {this.onSuccess}
     onFailure = {this.onFailure}
 />

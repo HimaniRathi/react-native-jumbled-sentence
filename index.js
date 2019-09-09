@@ -5,26 +5,24 @@ import { Audio } from 'expo-av';
 var screenWidth = Dimensions.get("window").width;
 export default class JumbledSentence extends React.Component{
     state = {
-        arrangedArray: [],
-        scrambledArray: []
+    arrangedArray: [],
+    scrambledArray: []
     }
     componentDidMount(){
-        this.scrambleSentence(this.props.sentence);
+    this.scrambleSentence(this.props.sentenceToJumble[0]);
     }
     scrambleSentence(sentence){
-        if(sentence[0].length){
-            let actualArray = sentence[0].trim().split(" ")
-            this.len = actualArray.length
-            let scrambledArray = []
-            while(this.len > scrambledArray.length){
-                let random = Math.floor(Math.random() * this.len)
-                if(scrambledArray.includes(actualArray[random])){
-                continue;
-                }
-                else{
-                scrambledArray.push(actualArray[random])
-                }
+        if(sentence.length){
+            this.actualArray = sentence.trim().split(" ")
+            this.len = this.actualArray.length
+            let scrambledArray = this.actualArray.map(e => {return e});
+            for (let i = scrambledArray.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                let temp = scrambledArray[i];
+                scrambledArray[i] = scrambledArray[j];
+                scrambledArray[j] = temp;
             }
+            console.log(scrambledArray)
             this.setState(state => {state.scrambledArray = scrambledArray; return state;})
         }else{
             console.log("empty string")
@@ -47,29 +45,31 @@ export default class JumbledSentence extends React.Component{
         }
     }
     handleSubmit(){
-        if(this.state.arrangedArray.length == this.len){
-            let response = this.state.arrangedArray.join(" ").trim();
-            if(this.props.sentence.includes(response)){
-                this.props.onSuccess();
-            }
-            else{
-                this.props.onFailure();
-                this.setState(state => {
-                    state.scrambledArray = state.arrangedArray;
-                    state.arrangedArray = [];
-                    return state;
-                })
-            }
-        }else{
-            Alert.alert(
-                "Complete the answer",
-                "You haven't reaaranged all the words",
-                [
-                    { text: "OK", onPress: () => {console.log("complete the answer")} }
-                ],
-                { cancelable: false }
-            );
+    if(this.state.arrangedArray.length == this.len){
+        let response = this.state.arrangedArray.join(" ").trim();
+        console.log(response)
+        if(this.props.sentenceToJumble.includes(response)){
+            this.props.onSuccess();
         }
+        else{
+            this.props.onFailure();
+            this.setState(state => {
+                state.scrambledArray = state.arrangedArray;
+                state.arrangedArray = [];
+                return state;
+            })
+        }
+    }else{
+        Alert.alert(
+            "Complete the answer",
+            "You haven't reaaranged all the words",
+            [
+                { text: "OK", onPress: () => {console.log("complete the answer")} }
+            ],
+            { cancelable: false }
+        );
+    }
+    
     }
     handleJumbledPress = async(index) => {
         let newJumbleArray = this.removeElementFromArray(this.state.scrambledArray, index)
@@ -94,30 +94,38 @@ export default class JumbledSentence extends React.Component{
     render(){
         return (
             <View>
-                <View style = {{flex: 1, justifyContent: 'center'}}>
-                    <Text style = {{fontWeight: 'bold', fontSize: 20, marginLeft: 20, marginBottom: 20}}>Rearranged Sentence</Text>
-                    <View style = {[styles.wordArrayStyle, {paddingLeft: 20}]}>
-                    {this.state.arrangedArray.map((word,index) => {
-                        return(
-                            <TouchableOpacity 
-                                style = {styles.wordButton} 
-                                key={index} 
-                                onPress = {() => {
-                                    this.handleArrangedPress(index)
-                                }}
-                            >
-                            <Text>{word}</Text>
-                            </TouchableOpacity>
-                        )
-                        })}
+                <View style = {{flex: 1, justifyContent: 'center', flexDirection: "column"}}>
+                    {this.props.hint ? (
+                        <View style = {{flex: 0.5}}>
+                            <Text style = {[styles.blockHeading, {marginTop: 40}]}>{this.props.hint.title ? this.props.hint.title : null}</Text>
+                            <Text style = {[styles.wordArrayStyle,{fontSize: 18}]}>{this.props.hint.description ? this.props.hint.description : null}</Text>
+                        </View>
+                    ): null}
+                    
+                    <View style = {{flex: 0.5}}>
+                        <Text style = {[styles.blockHeading]}>Rearranged Sentence</Text>
+                        <View style = {styles.wordArrayStyle}>
+                        {this.state.arrangedArray.map((word,index) => {
+                            return(
+                                <TouchableOpacity 
+                                    style = {styles.wordButton} 
+                                    key={index} 
+                                    onPress = {() => {
+                                        this.handleArrangedPress(index)
+                                    }}
+                                >
+                                <Text>{word}</Text>
+                                </TouchableOpacity>
+                            )
+                            })}
+                        </View>
                     </View>
-                    <View style = {styles.lineStyle}>
-                    </View>
+                    
                 </View>
                 {/* {this.state.scrambledArray.length ? ( */}
                     <View>
-                        <Text style = {{fontWeight: 'bold', fontSize: 20, marginLeft: 10}}>Jumbled Sentence</Text>
-                        <View style = {[styles.wordArrayStyle, {borderWidth: 1, backgroundColor: "#eaeaea", borderRadius: 5, padding: 10, margin: 10}]}>
+                        <Text style = {styles.blockHeading}>Jumbled Sentence</Text>
+                        <View style = {styles.wordArrayStyle}>
                             {this.state.scrambledArray.map((word,index) => {
                             return(
                                 <TouchableOpacity 
@@ -161,14 +169,18 @@ const styles = StyleSheet.create({
     },
     wordArrayStyle: {
         flexWrap: 'wrap', 
-        flexDirection: "row"
+        flexDirection: "row",
+        borderWidth: 1, 
+        backgroundColor: "#eaeaea", 
+        borderRadius: 5, 
+        padding: 10, 
+        margin: 10, 
+        borderColor: "#eaeaea"
     },
-    lineStyle: {
-        borderBottomWidth: 1,
-        alignSelf: 'stretch',
-        marginBottom: 15, 
-        marginLeft: 20, 
-        marginRight: 20
+    blockHeading: {
+        fontWeight: 'bold', 
+        fontSize: 20, 
+        marginLeft: 10
     },
     wordButton: {
         borderWidth: 1,
