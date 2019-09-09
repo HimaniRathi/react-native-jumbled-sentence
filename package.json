@@ -19,11 +19,11 @@
   "author": "himanirathi",
   "license": "MIT",
   "dependencies": {
-    "expo-av": "~6.0.0",
+    "expo-av": "~6.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz"
   },
   "devDependencies": {}
 }
