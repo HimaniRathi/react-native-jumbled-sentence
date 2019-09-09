@@ -1,15 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Dimensions, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Dimensions} from 'react-native';
 import { Audio } from 'expo-av';
 
 var screenWidth = Dimensions.get("window").width;
 export default class JumbledSentence extends React.Component{
     state = {
-    arrangedArray: [],
-    scrambledArray: []
+        arrangedArray: [],
+        scrambledArray: []
     }
     componentDidMount(){
-    this.scrambleSentence(this.props.sentence);
+        this.scrambleSentence(this.props.sentence);
     }
     scrambleSentence(sentence){
         if(sentence[0].length){
@@ -47,30 +47,29 @@ export default class JumbledSentence extends React.Component{
         }
     }
     handleSubmit(){
-    if(this.state.arrangedArray.length == this.len){
-        let response = this.state.arrangedArray.join(" ").trim();
-        if(this.props.sentence.includes(response)){
-            this.props.onSuccess();
+        if(this.state.arrangedArray.length == this.len){
+            let response = this.state.arrangedArray.join(" ").trim();
+            if(this.props.sentence.includes(response)){
+                this.props.onSuccess();
+            }
+            else{
+                this.props.onFailure();
+                this.setState(state => {
+                    state.scrambledArray = state.arrangedArray;
+                    state.arrangedArray = [];
+                    return state;
+                })
+            }
+        }else{
+            Alert.alert(
+                "Complete the answer",
+                "You haven't reaaranged all the words",
+                [
+                    { text: "OK", onPress: () => {console.log("complete the answer")} }
+                ],
+                { cancelable: false }
+            );
         }
-        else{
-            this.props.onFailure();
-            this.setState(state => {
-                state.scrambledArray = state.arrangedArray;
-                state.arrangedArray = [];
-                return state;
-            })
-        }
-    }else{
-        Alert.alert(
-            "Complete the answer",
-            "You haven't reaaranged all the words",
-            [
-                { text: "OK", onPress: () => {console.log("complete the answer")} }
-            ],
-            { cancelable: false }
-        );
-    }
-    
     }
     handleJumbledPress = async(index) => {
         let newJumbleArray = this.removeElementFromArray(this.state.scrambledArray, index)
