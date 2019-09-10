@@ -14,7 +14,7 @@ React Native npm module
 />
 ```
 
-#demo
+# demo
 ![](./assets/gifs/demoWithHint.gif)
 
 # another usage
@@ -25,5 +25,5 @@ React Native npm module
     onFailure = {this.onFailure}
 />
 ```
-#demo
+# demo
 ![](./assets/gifs/demoInEnglish.gif)
