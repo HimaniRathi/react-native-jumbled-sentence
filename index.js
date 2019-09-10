@@ -145,7 +145,7 @@ export default class JumbledSentence extends React.Component{
                     
                 
                 <TouchableOpacity style = {styles.footerButton} onPress = {() => this.handleSubmit()}>
-                    <Text style = {styles.footerText}>Done</Text>
+                    <Text style = {styles.footerText}>Check</Text>
                 </TouchableOpacity>
             </View>
         );

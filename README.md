@@ -14,6 +14,9 @@ React Native npm module
 />
 ```
 
+#demo
+![](./assets/gifs/demoWithHint.gif)
+
 # another usage
 ```
 <JumbledSentence
@@ -22,3 +25,5 @@ React Native npm module
     onFailure = {this.onFailure}
 />
 ```
+#demo
+![](./assets/gifs/demoInEnglish.gif)
