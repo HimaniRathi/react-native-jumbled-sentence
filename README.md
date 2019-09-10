@@ -2,7 +2,7 @@
 React Native npm module
 
 # installation
-```npm install https://github.com/HimaniRathi/react-native-jumbled-sentence```
+```npm install react-native-jumbled-sentence```
 
 # usage
 ```
